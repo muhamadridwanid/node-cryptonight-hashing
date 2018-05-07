@@ -141,6 +141,7 @@ static inline __m128i sl_xor(__m128i tmp1)
 template<uint8_t rcon>
 static inline void aes_genkey_sub(__m128i* xout0, __m128i* xout2)
 {
+#if defined(__AES__) && (__AES__ == 1)
     __m128i xout1 = _mm_aeskeygenassist_si128(*xout2, rcon);
     xout1  = _mm_shuffle_epi32(xout1, 0xFF); // see PSHUFD, set all elems to 4th elem
     *xout0 = sl_xor(*xout0);
@@ -149,6 +150,7 @@ static inline void aes_genkey_sub(__m128i* xout0, __m128i* xout2)
     xout1  = _mm_shuffle_epi32(xout1, 0xAA); // see PSHUFD, set all elems to 3rd elem
     *xout2 = sl_xor(*xout2);
     *xout2 = _mm_xor_si128(*xout2, xout1);
+#endif
 }
 
 
@@ -206,6 +208,7 @@ static inline void aes_round(__m128i key, __m128i* x0, __m128i* x1, __m128i* x2,
         *x7 = soft_aesenc((uint32_t*)x7, key);
     }
     else {
+#if defined(__AES__) && (__AES__ == 1)
         *x0 = _mm_aesenc_si128(*x0, key);
         *x1 = _mm_aesenc_si128(*x1, key);
         *x2 = _mm_aesenc_si128(*x2, key);
@@ -214,6 +217,7 @@ static inline void aes_round(__m128i key, __m128i* x0, __m128i* x1, __m128i* x2,
         *x5 = _mm_aesenc_si128(*x5, key);
         *x6 = _mm_aesenc_si128(*x6, key);
         *x7 = _mm_aesenc_si128(*x7, key);
+#endif
     }
 }
 
