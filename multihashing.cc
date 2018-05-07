@@ -13,8 +13,6 @@
 #define SOFT_AES true
 #endif
 
-#define SOFT_AES true
-
 static struct cryptonight_ctx* ctx = NULL;
 
 void init_ctx() {
